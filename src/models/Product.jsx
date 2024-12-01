@@ -8,22 +8,11 @@ const ProductItem = (props) => {
         <Pressable
             onPress={onPress} style={styles.container}>
 
-
-            <Image style={styles.image} source={{ uri: item?.image }} /> :
-            {/* <Image style={styles.image} source={require("../images/product2.png")} /> */}
-
-
+            <Image style={styles.image} source={{ uri: item?.image[0] }} /> :
+       
             <Text numberOfLines={1} style={styles.name}>{item?.name}</Text>
 
-            {
-                item?.categoryName
-                    ?
-                    <Text numberOfLines={1} style={styles.categoryName}>{item?.categoryName}</Text> :
-                    <Text numberOfLines={1} style={styles.categoryName}>CategoryName</Text>
-            }
-
-            <Text style={styles.price}>{item?.price}$</Text>
-
+            <Text style={styles.price}>${item?.price}</Text>
 
         </Pressable>
     )

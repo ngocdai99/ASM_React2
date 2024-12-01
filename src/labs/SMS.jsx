@@ -4,23 +4,24 @@ import colors from '../utils/color'
 
 
 const SMS = () => {
-    
+
     const [num1, setNum1] = useState(list[0].num1)
     const [operator, setOperator] = useState(list[0].operator)
     const [num2, setNum2] = useState(list[0].num2)
     const [result, setResult] = useState(list[0].result)
 
     const [hiddenIndex, setHiddenIndex] = useState(Math.ceil(Math.random() * 4))
+    const [isHidden, setIsHidden] = useState(true)
 
 
     console.log("hiddenIndex = ", hiddenIndex)
 
     const check = () => {
         let rightAnswer = false
-        switch(operator){
+        switch (operator) {
             case "+": {
                 rightAnswer = (num1 + num2 === result)
-                break
+               break
             }
             case "-": {
                 rightAnswer = (num1 - num2 === result)
@@ -35,16 +36,17 @@ const SMS = () => {
                 break
             }
         }
-       
+
         console.log("rightAnswer = ", rightAnswer)
-        if(rightAnswer){
+        if (rightAnswer) {
             const randomSet = Math.round(Math.random() * list.length)
             setHiddenIndex(Math.ceil(Math.random() * 4))
             setNum1(list[randomSet].num1)
             setOperator(list[randomSet].operator)
             setNum2(list[randomSet].num2)
             setResult(list[randomSet].result)
-        }else{
+            setIsHidden(true)
+        } else {
             console.log("Sai roi")
         }
     }
@@ -56,25 +58,40 @@ const SMS = () => {
             <View style={styles.row}>
 
                 <CustomTextInput
+                    isHidden={isHidden}
                     hiddenIndex={hiddenIndex}
                     index={1}
                     value={num1}
-                    onChangeText={setNum1}
+                    onChangeText={(text) => {
+                        setIsHidden(false)
+                        setNum1(text)
+                    }}
+                   
                 />
 
                 <CustomTextInput
+                    isHidden={isHidden}
                     hiddenIndex={hiddenIndex}
                     index={2}
                     value={operator}
                     keyboardType="default"
-                    onChangeText={setOperator}
+                    onChangeText={(text) => {
+                        setIsHidden(false)
+                        setOperator(text)
+                    }}
+                   
                 />
 
                 <CustomTextInput
+                    isHidden={isHidden}
                     hiddenIndex={hiddenIndex}
                     index={3}
                     value={num2}
-                    onChangeText={setNum2}
+                    onChangeText={(text) => {
+                        setIsHidden(false)
+                        setNum2(text)
+                    }}
+                   
                 />
 
 
@@ -82,12 +99,15 @@ const SMS = () => {
 
 
                 <CustomTextInput
+                    isHidden={isHidden}
                     hiddenIndex={hiddenIndex}
                     index={4}
                     value={result}
                     onChangeText={(text) => {
+                        setIsHidden(false)
                         setResult(text)
                     }}
+                   
                 />
 
 
@@ -103,15 +123,16 @@ const SMS = () => {
 
 
 const CustomTextInput = (props) => {
-    const { hiddenIndex, index, value, onChangeText, keyboardType = "numeric" } = props
+    const { onFocus,isHidden, hiddenIndex, index, value, onChangeText, keyboardType = "numeric" } = props
     return (
         <TextInput
             editable={index === hiddenIndex}
             style={styles.textInput}
             keyboardType={keyboardType}
-            // value={(index === hiddenIndex) ? "" : value.toString()}
-            value={value.toString()}
+            value={(isHidden && index === hiddenIndex) ? "" : value.toString()}
+            // value={value.toString()}
             onChangeText={onChangeText}
+            onFocus={onFocus}
         />
     )
 

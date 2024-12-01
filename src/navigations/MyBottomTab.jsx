@@ -3,11 +3,11 @@ import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import colors from '../utils/color'
-import ScreenEnum from '../utils/ScreenEnum';
-import HomeScreen from '../screens/HomeScreen';
-import SearchScreen from '../screens/SearchScreen';
-import NotificationScreen from '../screens/NotificationScreen';
-import ProfileScreen from '../screens/ProfileScreen';
+import ScreenEnum from '../enums/ScreenEnum';
+import HomeScreen from '../screens/bottom_navs/HomeScreen';
+import SearchScreen from '../screens/bottom_navs/SearchScreen';
+import NotificationScreen from '../screens/bottom_navs/NotificationScreen';
+import ProfileScreen from '../screens/bottom_navs/ProfileScreen';
 
 
 const Tab = createBottomTabNavigator()
@@ -47,7 +47,7 @@ const MyBottomTab = () => {
       <Tab.Screen name={ScreenEnum.SearchScreen} component={SearchScreen} />
       <Tab.Screen name={ScreenEnum.NotificationScreen} component={NotificationScreen} />
       <Tab.Screen name={ScreenEnum.ProfileScreen} component={ProfileScreen} />
-     
+
 
     </Tab.Navigator>
   )

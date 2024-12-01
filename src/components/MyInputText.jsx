@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, TextInput, Pressable, Image, Dimensions } from 'react-native'
 import React, { useState } from 'react'
-import { styles } from '../screens/LoginScreen'
+import { styles } from '../screens/auth/LoginScreen'
 import colors from '../utils/color'
 
 const MyInputText = (props) => {
