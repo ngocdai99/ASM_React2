@@ -11,6 +11,7 @@ import { store } from './src/redux/ReduxStore';
 
 import { Provider } from 'react-redux';
 import AppNavigation from './src/navigations/AppNavigation';
+import HorizontalPagerWithImages from './src/components/MyHorizontalPager';
 
 
 function App() {

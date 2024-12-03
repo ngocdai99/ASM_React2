@@ -41,13 +41,29 @@ const RegisterScreen = (props) => {
     dispatch(registerThunk(registerRequest))
   }
 
+  const resetFormData = () => {
+    setFormData(
+      {
+        name: '',
+        nameMessage: '',
+        email: '',
+        emailMessage: '',
+        password: '',
+        passwordMessage: '',
+      }
+    )
+  }
+
   useEffect(() => {
     if (registerStatus === 'succeeded') {
       setLoading(false);
       MyToast.show(registerResponse.message);
+      resetFormData()
+      navigation.navigate(ScreenEnum.LoginScreen)
     } else if (registerStatus === 'failed') {
       setLoading(false);
       MyToast.show(registerResponse.message);
+   
     }
   }, [registerStatus]);
 

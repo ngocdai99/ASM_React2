@@ -1,20 +1,22 @@
 import { Image, StyleSheet, Text, Touchable, TouchableOpacity, Dimensions, View, ScrollView, ActivityIndicator, Pressable } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import colors from '../../utils/color';
 import { getProductDetailThunk } from '../../redux/slices/product/GetProductDetailSlice';
 import { useSelector, useDispatch } from 'react-redux';
-
-import MyToast from '../../utils/MyToast';
-
-
-
+import PagerView from 'react-native-pager-view';
+import { ScreenContext } from 'react-native-screens';
+import ScreenEnum from '../../enums/ScreenEnum';
 
 const ProductDetailScreen = (props) => {
   const { navigation, route } = props;
   const { params } = route;
   const { productId } = params;
 
-  const [loading, setLoading] = useState(false)
+  console.log('productId = ', productId)
+
+  const pagerRef = useRef(0)
+  const [currentPage, setCurrentPage] = useState(0)
+
 
   // Thêm state để quản lý số lượng sản phẩm
   const [quantity, setQuantity] = useState(1);
@@ -26,7 +28,7 @@ const ProductDetailScreen = (props) => {
 
   const getProductDetailFunction = () => {
     if (productId) {
-      setLoading(true)
+
       const getProductDetailRequest = { productId: productId, userId: "671cb2de0b352e4659628322" }
       dispatch(getProductDetailThunk(getProductDetailRequest))
     }
@@ -34,17 +36,10 @@ const ProductDetailScreen = (props) => {
   }
 
   useEffect(() => {
-    if (getProductDetailStatus === 'idle') {
-      getProductDetailFunction()
-    } else if (getProductDetailStatus === 'succeeded') {
-      setLoading(false)
-
-      console.log('productDetail = ', productDetail)
-    } else if (getProductDetailStatus === 'failed') {
-      setLoading(false)
-      MyToast.show("Khong the lay detail")
+    if (productId) {
+      getProductDetailFunction();
     }
-  }, [getProductDetailStatus])
+  }, [productId]);
 
   // Hàm tăng số lượng
   const increaseQuantity = () => {
@@ -60,18 +55,53 @@ const ProductDetailScreen = (props) => {
 
   return (
     <View style={styles.container}>
+
+      {
+        getProductDetailStatus === 'loading' && (
+          <ActivityIndicator style={styles.loading} size="large" color={colors.green} />
+        )
+      }
+
+
+
+      {
+        getProductDetailStatus === 'succeeded' &&
+        <SuccessScreen
+          increaseQuantity={increaseQuantity}
+          decreaseQuantity={decreaseQuantity}
+          productDetail={productDetail}
+          totalPrice={totalPrice}
+          quantity={quantity}
+          onbackPress={() => navigation.goBack()}
+          navigateToCart={() => navigation.navigate(ScreenEnum.CartScreen)}
+          pagerRef={pagerRef}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      }
+
+      {
+        getProductDetailStatus === 'failed' &&
+        <Text style={{ color: 'red' }}>Lỗi tải dữ liệu!</Text>
+      }
+
+
+    </View>
+  );
+};
+
+
+const SuccessScreen = (props) => {
+  const { productDetail, totalPrice, decreaseQuantity, increaseQuantity, quantity, onbackPress, pagerRef, currentPage, setCurrentPage, navigateToCart } = props
+  console.log('pagerRef: ', pagerRef)
+  return (
+    <View style={{ flex: 1, flexDirection: 'column' }}>
+
       <View style={{ flex: 1, flexDirection: 'column' }}>
 
-       
-        {loading && ( // Hiển thị spinner khi loading
-          <ActivityIndicator style={styles.loading} size="large" color={colors.green} />
-        )}
-
-
-        {/* header */}
         <View style={styles.header}>
           <Pressable
-            onPress={() => { navigation.goBack() }}>
+            onPress={() => { onbackPress() }}>
             <Image
               style={{ height: 24, width: 24, marginTop: 10, marginLeft: 20 }}
               source={require('../../images/ic_back.png')}
@@ -86,24 +116,61 @@ const ProductDetailScreen = (props) => {
               color: colors.black,
             }}
           >
-            {productDetail?.name || 'Product Name Unavailable'}
-          
+            {productDetail.name || 'Product Name Unavailable'}
+
           </Text>
-          <Image
-            style={{ height: 24, width: 24, marginTop: 10, marginRight: 20 }}
-            source={require('../../images/ic_cart.png')}
-          />
+          <Pressable onPress={navigateToCart}>
+            <Image
+              style={{ height: 24, width: 24, marginTop: 10, marginRight: 20 }}
+              source={require('../../images/ic_cart.png')}
+            />
+          </Pressable>
+
         </View>
 
-        <Image style={[styles.logo, { position: 'absolute', top: 80, left: 0 }]} source={{ uri: productDetail?.image[0] }} />
+        <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
+
+          <PagerView
+            initialPage={0}
+            style={styles.pagerView}
+            onPageSelected={event => { setCurrentPage(event.nativeEvent.position) }}
+            ref={pagerRef}
+          >
+            {
+              productDetail.image.map((item, index) => {
+                return (
+                  <View key={index} style={styles.page}>
+                    <Image
+                      source={{ uri: item }}
+                      style={styles.sliderItem}
+                      resizeMode="contain"
+                    />
+
+                  </View>
+                )
+              })
+            }
+          </PagerView>
+          <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'center' }}>
+            {
+              productDetail.image.map((item, index) => {
+                return (
+                  <View key={index + 1} style={currentPage === (index) ? styles.selectedCircle : styles.unSelectedCircle} ></View>
+                )
+              })
+            }
+          </View>
+
+
+        </View>
 
 
         {/* content */}
-        <View style={{ marginTop: 270, marginHorizontal: 16 }}>
+        <View style={{ marginTop: 10, marginHorizontal: 16 }}>
 
           <Text style={styles.price} numberOfLines={1} ellipsizeMode="tail">
             ${productDetail?.price}
-          
+
           </Text>
 
           <View style={styles.row}>
@@ -111,7 +178,7 @@ const ProductDetailScreen = (props) => {
             <Text style={styles.category}>Ưa bóng</Text>
           </View>
 
-         
+
 
           <View style={styles.descriptionContainer}>
             <Text>Chi tiết sản phẩm</Text>
@@ -134,7 +201,7 @@ const ProductDetailScreen = (props) => {
           <View style={styles.descriptionContainer}>
             <View style={[styles.row, { justifyContent: 'space-between' }]}>
               <Text>Tình trạng</Text>
-              <Text style={{ color: colors.primary }}>Còn {productDetail?.quantity} sp</Text>
+              <Text style={{ color: colors.primary }}>Còn {productDetail.quantity} sp</Text>
             </View>
 
           </View>
@@ -170,22 +237,15 @@ const ProductDetailScreen = (props) => {
         </View>
 
       </View>
+
       <Pressable style={styles.customPressable}>
         <Text style={styles.customPressableText}>CHỌN MUA</Text>
       </Pressable>
 
     </View>
-  );
-};
+  )
+}
 
-const ProductType = (props) => {
-  const { item } = props;
-  return (
-    <TouchableOpacity style={styles.type}>
-      <Text style={styles.textButton}>{item}</Text>
-    </TouchableOpacity>
-  );
-};
 
 export default ProductDetailScreen;
 
@@ -224,6 +284,36 @@ const styles = StyleSheet.create({
     color: colors.white,
     padding: 4,
     borderRadius: 8, marginHorizontal: 4
+  },
+  pagerView: {
+    height: 300,
+    marginTop: 10
+  },
+
+  page: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: Dimensions.get('window').width,
+    height: 290,
+    flexDirection: 'column',
+    // backgroundColor: 'violet',
+    justifyContent: 'center'
+  },
+
+  selectedCircle: {
+    backgroundColor: 'green',
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    marginHorizontal: 6
+  },
+
+  unSelectedCircle: {
+    backgroundColor: 'gray',
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    marginHorizontal: 6
   },
   logo: {
     width: Dimensions.get('window').width,
@@ -273,6 +363,13 @@ const styles = StyleSheet.create({
   },
   jusC: {
     justifyContent: 'center',
+  },
+
+  sliderItem: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
+    borderRadius: 10
   },
   image: {
     width: 260,

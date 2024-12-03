@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -9,29 +9,38 @@ import {
   FlatList,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import ScreenEnum from '../../enums/ScreenEnum';
 
-const CartScreen = ({navigation}) => {
+const array = [
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqK7awHfreuNem8DGGseQd0eQ25VMbu96LqQ&s',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6SqCfVLKEyD1hZ6XZwxAnFtCHMH9CQ2DatQ&s',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkQoLOhGJZLvlLb2M_-2Np1Cny4mFUIHLFxPfhMmvwWSlTD--eDhJMdvFd7bz5MGS5KKE&usqp=CAU'
+]
+const CartScreen = ({ navigation }) => {
   const [products, setProducts] = useState([
     {
       id: 1,
       name: 'Áo Thun Nam',
       price: 250000,
       quantity: 1,
-      image: 'https://via.placeholder.com/75',
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqK7awHfreuNem8DGGseQd0eQ25VMbu96LqQ&s'
+      ,
     },
     {
       id: 2,
       name: 'Quần Jeans',
       price: 400000,
       quantity: 1,
-      image: 'https://via.placeholder.com/75',
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6SqCfVLKEyD1hZ6XZwxAnFtCHMH9CQ2DatQ&s',
+
     },
     {
       id: 3,
       name: 'Giày Thể Thao',
       price: 1200000,
       quantity: 1,
-      image: 'https://via.placeholder.com/75',
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkQoLOhGJZLvlLb2M_-2Np1Cny4mFUIHLFxPfhMmvwWSlTD--eDhJMdvFd7bz5MGS5KKE&usqp=CAU'
+
     },
   ]);
 
@@ -46,7 +55,7 @@ const CartScreen = ({navigation}) => {
   const increaseQuantity = id => {
     setProducts(prev =>
       prev.map(item =>
-        item.id === id ? {...item, quantity: item.quantity + 1} : item,
+        item.id === id ? { ...item, quantity: item.quantity + 1 } : item,
       ),
     );
   };
@@ -55,7 +64,7 @@ const CartScreen = ({navigation}) => {
     setProducts(prev =>
       prev.map(item =>
         item.id === id && item.quantity > 1
-          ? {...item, quantity: item.quantity - 1}
+          ? { ...item, quantity: item.quantity - 1 }
           : item,
       ),
     );
@@ -77,7 +86,7 @@ const CartScreen = ({navigation}) => {
       .reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
-  const renderItem = ({item}) => (
+  const renderItem = ({ item }) => (
     <View style={styles.cartItem}>
       <TouchableOpacity
         style={styles.checkBox}
@@ -89,7 +98,7 @@ const CartScreen = ({navigation}) => {
           ]}
         />
       </TouchableOpacity>
-      <Image source={{uri: item.image}} style={styles.productImage} />
+      <Image source={{ uri: item.image }} style={styles.productImage} />
       <View style={styles.productInfo}>
         <Text style={styles.productName}>{item.name}</Text>
         <Text style={styles.productPrice}>
@@ -109,7 +118,7 @@ const CartScreen = ({navigation}) => {
           />
           <TouchableOpacity onPress={() => increaseQuantity(item.id)}>
             <Image
-               source={require('../../images//ic_plus.png')}
+              source={require('../../images//ic_plus.png')}
               style={styles.icon}
             />
           </TouchableOpacity>
@@ -147,16 +156,16 @@ const CartScreen = ({navigation}) => {
       />
       <View style={styles.footer}>
         <View style={styles.total}>
-            <Text style={styles.subTotal}>
-          Tạm tính:
-        </Text>
-        <Text style={styles.subTotal1}>
-        {calculateTotal().toLocaleString('vi-VN')}đ
-        </Text> 
+          <Text style={styles.subTotal}>
+            Tạm tính:
+          </Text>
+          <Text style={styles.subTotal1}>
+            {calculateTotal().toLocaleString('vi-VN')}đ
+          </Text>
         </View>
-       
 
-        <TouchableOpacity style={styles.checkoutButton} onPress={() => navigation.navigate('Payment')}>
+
+        <TouchableOpacity style={styles.checkoutButton} onPress={() => navigation.navigate(ScreenEnum.PaymentScreen)}>
           <Text style={styles.checkoutText}>Tiến hành thanh toán</Text>
           <Icon name="keyboard-arrow-right" size={16} color="#fff" />
         </TouchableOpacity>

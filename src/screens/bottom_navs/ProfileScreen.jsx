@@ -1,9 +1,11 @@
-// src/screens/Profile.jsx
+
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import colors from '../../utils/color';
+import ScreenEnum from '../../enums/ScreenEnum';
 
-const Profile = () => {
+const Profile = (props) => {
+  const {navigation} = props
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -29,16 +31,16 @@ const Profile = () => {
       </View>
 
       {/* Menu Items */}
-      <TouchableOpacity style={{ marginVertical: 12 }} >
+      <TouchableOpacity style={{ marginVertical: 12 }}  onPress={() => navigation.navigate(ScreenEnum.EditProfileScreen)}>
         <Text style={styles.menuText}>Chỉnh sửa thông tin</Text>
       </TouchableOpacity>
       <TouchableOpacity style={{ marginVertical: 12 }} >
         <Text style={styles.menuText}>Cẩm nang trồng cây</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={{ marginVertical: 12 }} >
+      <TouchableOpacity style={{ marginVertical: 12 }} onPress={() => navigation.navigate(ScreenEnum.OrderHistoryScreen)} >
         <Text style={styles.menuText}>Lịch sử giao dịch</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={{ marginVertical: 12 }} >
+      <TouchableOpacity style={{ marginVertical: 12 }}  onPress={() => navigation.navigate(ScreenEnum.QAndAScreen)} >
         <Text style={styles.menuText}>Q&A</Text>
       </TouchableOpacity>
 
@@ -54,7 +56,7 @@ const Profile = () => {
       <TouchableOpacity style={{ marginVertical: 12 }} >
         <Text style={styles.menuText}>Chính sách quyền riêng tư</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.logoutButton}>
+      <TouchableOpacity style={styles.logoutButton} onPress={() => navigation.navigate(ScreenEnum.LoginScreen)}>
         <Text style={styles.logoutText}>Đăng xuất</Text>
       </TouchableOpacity>
     </View>

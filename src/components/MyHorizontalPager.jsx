@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, View, Button, Image } from 'react-native';
 import PagerView from 'react-native-pager-view';
 
-const HorizontalPager = () => {
+const HorizontalPagerWithImages = () => {
   const pagerRef = useRef(null);
 
   const goToPage = (pageIndex) => {
@@ -11,27 +11,38 @@ const HorizontalPager = () => {
     }
   };
 
+
+
   return (
     <View style={{ flex: 1 }}>
       <PagerView style={styles.pagerView} initialPage={0} ref={pagerRef}>
-        <View key="1" style={[styles.page, { backgroundColor: 'red' }]}>
-          <Text>Page 1</Text>
-        </View>
-        <View key="2" style={[styles.page, { backgroundColor: 'blue' }]}>
-          <Text>Page 2</Text>
-        </View>
-        <View key="3" style={[styles.page, { backgroundColor: 'green' }]}>
-          <Text>Page 3</Text>
-        </View>
+
+        {
+          array.map((item, index) => {
+            return (
+              <View key={index + 1} style={styles.page}>
+                <Image
+                  source={{ uri: item }}
+                  style={styles.image}
+                  resizeMode="cover"
+                />
+              </View>
+            )
+          })
+        }
+
       </PagerView>
-      <View style={styles.buttonContainer}>
-        <Button title="Go to Page 1" onPress={() => goToPage(0)} />
-        <Button title="Go to Page 2" onPress={() => goToPage(1)} />
-        <Button title="Go to Page 3" onPress={() => goToPage(2)} />
-      </View>
+
+
     </View>
   );
 };
+
+const array = [
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqK7awHfreuNem8DGGseQd0eQ25VMbu96LqQ&s',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6SqCfVLKEyD1hZ6XZwxAnFtCHMH9CQ2DatQ&s',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkQoLOhGJZLvlLb2M_-2Np1Cny4mFUIHLFxPfhMmvwWSlTD--eDhJMdvFd7bz5MGS5KKE&usqp=CAU'
+]
 
 const styles = StyleSheet.create({
   pagerView: {
@@ -40,7 +51,13 @@ const styles = StyleSheet.create({
   page: {
     justifyContent: 'center',
     alignItems: 'center',
+    width: '100%',
+    height: 300
+  },
+  image: {
+    width: '100%',
     height: '100%',
+    resizeMode: 'cover'
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -49,4 +66,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HorizontalPager;
+export default HorizontalPagerWithImages;

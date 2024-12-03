@@ -3,7 +3,7 @@ import React from 'react'
 
 const PaymentScreen = (props) => {
 
-    // const {navigation,route} = props
+    const {navigation,route} = props
 
     // const { price } = route.params || {}; 
 
@@ -37,13 +37,13 @@ const PaymentScreen = (props) => {
                 <Image source={require('../../images/linethanhtoan.png')} style={styles.line} />
                 <Text style={styles.textchitiet}>
                     tranminhtri@gmail.com               </Text>
-                  <Image source={require('../../images/linethanhtoan.png')} style={styles.line} />
+                <Image source={require('../../images/linethanhtoan.png')} style={styles.line} />
                 <Text style={styles.textchitiet}>
                     Địa Chỉ         </Text>
-                    <Image source={require('../../images/linethanhtoan.png')} style={styles.line} />
+                <Image source={require('../../images/linethanhtoan.png')} style={styles.line} />
                 <Text style={styles.textchitiet}>
                     Số Điện Thoai             </Text>
-                  <Image source={require('../../images/linethanhtoan.png')} style={styles.line} />
+                <Image source={require('../../images/linethanhtoan.png')} style={styles.line} />
                 <Text style={styles.textchitiet}>
                     tranminhtri@gmail.com               </Text>
                 <Image source={require('../../images/linethanhtoan.png')} style={styles.line} />
@@ -87,7 +87,7 @@ const PaymentScreen = (props) => {
                     Tạm Tính:
                 </Text>
                 <Text style={{ fontWeight: 'bold', color: 'black', fontSize: 16 }}>
-                {price}đ
+                    {price}đ
                 </Text>
             </View>
 
@@ -96,7 +96,7 @@ const PaymentScreen = (props) => {
                     Phí Vận Chuyển
                 </Text>
                 <Text style={{ fontWeight: 'bold', color: 'black', fontSize: 16 }}>
-                {shippingFee}đ
+                    {shippingFee}đ
                 </Text>
             </View>
             <View style={{ flexDirection: 'row', width: "100%", justifyContent: 'space-between' }}>
@@ -104,13 +104,13 @@ const PaymentScreen = (props) => {
                     Tổng Cộng
                 </Text>
                 <Text style={{ fontWeight: 'bold', color: '#007537', fontSize: 16 }}>
-                {total}đ
+                    {total}đ
                 </Text>
             </View>
 
             <TouchableOpacity style={styles.thanhtoan} >
-        <Text style={{ color: 'white', fontSize: 18, marginLeft: 15 }}>Tiếp Tục</Text>
-      </TouchableOpacity>
+                <Text style={{ color: 'white', fontSize: 18, marginLeft: 15 }}>Tiếp Tục</Text>
+            </TouchableOpacity>
 
 
 
@@ -126,10 +126,10 @@ const styles = StyleSheet.create({
         backgroundColor: "#007537",
         borderRadius: 8,
         padding: 10,
-        alignItems:'center'
-    
-    
-      },
+        alignItems: 'center'
+
+
+    },
     textgiaohang: {
         fontSize: 16,
         marginTop: 20,

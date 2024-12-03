@@ -2,8 +2,7 @@ import { StyleSheet, Text, View, Image, ScrollView, ActivityIndicator, StatusBar
 import React, { useState, useEffect } from 'react'
 import colors from '../../utils/color'
 import ScreenEnum from '../../enums/ScreenEnum'
-import APIHelper from '../../helpers/APIHelper'
-import ProductItem from '../../models/Product'
+
 
 const HomeScreen = (props) => {
   const { navigation } = props
@@ -33,7 +32,10 @@ const HomeScreen = (props) => {
             không gian nhà bạn
           </Text>
 
-          <Image style={styles.ic_cart} source={require('../../images/ic_cart.png')} />
+          <Pressable onPress={() => navigation.navigate(ScreenEnum.CartScreen)}>
+            <Image style={styles.ic_cart} source={require('../../images/ic_cart.png')} />
+
+          </Pressable>
         </View>
 
         <View style={[styles.row, { marginTop: 10, zIndex: 1 }]}>
